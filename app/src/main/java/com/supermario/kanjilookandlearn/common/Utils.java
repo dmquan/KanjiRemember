@@ -113,4 +113,105 @@ public class Utils {
     }
 
 
+    public static Drawable getDrawableFromAssets(Context context, String name) {
+
+        Resources res = context.getResources();
+
+        InputStream ims = null;
+        try {
+            ims = context.getAssets().open(name + ".jpg");
+            Drawable d = Drawable.createFromStream(ims, null);
+            return d;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // load image as Drawable
+
+        return null;
+    }
+
+    public static InputStream getInputStreamFromAssets(Context context, String name) {
+
+        Resources res = context.getResources();
+
+        //add "_" file userName for fix resource userName  error.
+        int rid = res
+                .getIdentifier(name, "assets", context.getPackageName());
+        if (rid <= 0) {
+            return null;
+        }
+        InputStream in = res.openRawResource(rid);
+        if (in == null) {
+            return null;
+        }
+        return in;
+    }
+
+    public static boolean isHiragana(char c) {
+        if (Character.UnicodeBlock.of(c) == Character.UnicodeBlock.HIRAGANA) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isHiragana(String str) {
+        for (int i = 0; i < str.length(); i++) {
+            if (!isHiragana(str.charAt(i))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static boolean isKatakana(char c) {
+        if (Character.UnicodeBlock.of(c) == Character.UnicodeBlock.KATAKANA) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isKatakana(String str) {
+        for (int i = 0; i < str.length(); i++) {
+            if (!isKatakana(str.charAt(i))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static boolean isKanji(char c) {
+        if (Character.UnicodeBlock.of(c) == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isKanji(String str) {
+        for (int i = 0; i < str.length(); i++) {
+            if (!isKanji(str.charAt(i))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static boolean isJapanese(char c) {
+        if (isKatakana(c) || isHiragana(c) || isKanji(c)) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isJapanese(String str) {
+        for (int i = 0; i < str.length(); i++) {
+            if (!isJapanese(str.charAt(i))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

@@ -14,4 +14,5 @@ public class Kanji {
     public String example;
     public String image;
     public String imageWrite;
+    public String remember;
 }

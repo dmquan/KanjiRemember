@@ -1,12 +1,15 @@
 package com.supermario.kanjilookandlearn.activity;
 
+import android.app.SearchManager;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,10 +26,13 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String KANJI_LIST_FRAGMENT = "kanj_list_fragment";
     //Defining Variables
     private Toolbar toolbar;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
+    private Toast toast;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,12 +59,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        ArrayList<Kanji> list = KanjiProvider.searchArea(this, "一");
-        for(int i = 0; i < list.size(); i++){
-            if(list.get(i).kanji != null){
-                Log.d("MainActivity:", list.get(i).kanji);
-            }
-        }
+        initId();
+
+    }
+
+    private void initId() {
+
     }
 
     private void setupDrawerContent() {
@@ -92,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Inbox Selected", Toast.LENGTH_SHORT).show();
                         ContentFragment fragment = new ContentFragment();
                         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.frame,fragment);
+                        fragmentTransaction.replace(R.id.frame,fragment, KANJI_LIST_FRAGMENT);
                         fragmentTransaction.commit();
                         return true;
 
@@ -129,12 +135,47 @@ public class MainActivity extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.main, menu);
-//        return true;
-//    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        // Retrieve the SearchView and plug it into SearchManager
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setQueryHint(getString(R.string.search));
+        //*** setOnQueryTextListener ***
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText == null || newText.equals("")) {
+                    return false;
+                }
+
+                Fragment f = getSupportFragmentManager().findFragmentById(R.id.frame);
+                if (f instanceof ContentFragment){
+                    String text = "";
+                    ContentFragment contentFragment = (ContentFragment)f;
+                    ArrayList<Kanji> list = KanjiProvider.searchKanji(MainActivity.this, newText);
+                    if(list != null){
+                        contentFragment.updateKanjiList(list);
+                    }
+
+
+                }
+
+
+                return false;
+            }
+        });
+        return true;
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
