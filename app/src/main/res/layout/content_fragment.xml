@@ -24,7 +24,7 @@
         app:layout_anchor="@id/recyclerview"
         android:src="@drawable/icon_flash_card"
         app:layout_anchorGravity="bottom|right|end"
-        app:backgroundTint="#00bfff"
+        app:backgroundTint="@color/PrimaryColor"
         app:rippleColor="#FFF"
         app:fabSize="normal"/>
     </android.support.design.widget.CoordinatorLayout>
