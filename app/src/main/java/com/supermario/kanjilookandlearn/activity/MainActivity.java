@@ -32,13 +32,17 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
     private Toast toast;
+    private boolean isShowFavorite = false;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try{
-            DatabaseHandler.createDB(this);
+            if(DatabaseHandler.isHavingDatabase() == false ){
+                DatabaseHandler.createDB(this);
+            }
+
         }catch (IOException ex){
             ex.printStackTrace();
         }
@@ -102,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
                         fragmentTransaction.commit();
                         return true;
 
+
                     default:
                         Toast.makeText(getApplicationContext(), "Somethings Wrong", Toast.LENGTH_SHORT).show();
                         return true;
@@ -154,16 +159,19 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                ArrayList<Kanji> list;
                 if (newText == null || newText.equals("")) {
-                    return false;
-                }
+                    list = KanjiProvider.getAll(MainActivity.this);
+                } else {
+                    list = KanjiProvider.searchKanji(MainActivity.this, newText);
 
+                }
                 Fragment f = getSupportFragmentManager().findFragmentById(R.id.frame);
-                if (f instanceof ContentFragment){
+                if (f instanceof ContentFragment) {
                     String text = "";
-                    ContentFragment contentFragment = (ContentFragment)f;
-                    ArrayList<Kanji> list = KanjiProvider.searchKanji(MainActivity.this, newText);
-                    if(list != null){
+                    ContentFragment contentFragment = (ContentFragment) f;
+
+                    if (list != null) {
                         contentFragment.updateKanjiList(list);
                     }
 
@@ -185,10 +193,43 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_show_favorite) {
+            if(isShowFavorite){
+                isShowFavorite = false;
+                item.setIcon(R.drawable.icon_favorite_not_show);
+                showFavorite(false);
+            }else{
+                isShowFavorite = true;
+                item.setIcon(R.drawable.icon_favorite_show);
+                showFavorite(true);
+            }
+
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showFavorite(boolean isShowFavorite) {
+        ArrayList<Kanji> list;
+        if (isShowFavorite) {
+            list = KanjiProvider.getAllFavorite(MainActivity.this);
+        }else{
+            list = KanjiProvider.getAll(MainActivity.this);
+
+        }
+        Fragment f = getSupportFragmentManager().findFragmentById(R.id.frame);
+        if (f instanceof ContentFragment){
+            String text = "";
+            ContentFragment contentFragment = (ContentFragment)f;
+
+            if(list != null){
+                contentFragment.updateKanjiList(list);
+            }else{
+                contentFragment.updateKanjiList(new ArrayList<Kanji>());
+            }
+
+
+        }
     }
 }

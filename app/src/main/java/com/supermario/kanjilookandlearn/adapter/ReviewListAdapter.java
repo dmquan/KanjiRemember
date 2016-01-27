@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.supermario.kanjilookandlearn.R;
 import com.supermario.kanjilookandlearn.common.Utils;
 import com.supermario.kanjilookandlearn.data.Kanji;
+import com.supermario.kanjilookandlearn.database.KanjiProvider;
 
 import java.util.ArrayList;
 
@@ -111,7 +112,7 @@ public class ReviewListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof ViewHolder) {
 
             ((ViewHolder) holder).kanjiTextView.setText(mDataset.get(position).kanji);
@@ -124,16 +125,37 @@ public class ReviewListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             StyleSpan b = new StyleSpan(android.graphics.Typeface.BOLD); // Span to make text bold
 
             int index = mDataset.get(position).remember.indexOf(mDataset.get(position).meanVietnamese);
-            if(index >= 0){
+            if (index >= 0) {
                 // set only the name part of the SpannableStringBuilder to be bold --> 16, 16 + name.length()
                 sb.setSpan(b, index, index + mDataset.get(position).meanVietnamese.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
             }
 
+            ((ViewHolder) holder).kunyomiTextView.setText(mDataset.get(position).kunyomi);
+            ((ViewHolder) holder).onyomiTextView.setText(mDataset.get(position).onyomi);
 
 
             ((ViewHolder) holder).rememberTextView.setText(sb);
             ((ViewHolder) holder).pictureImageView.setImageDrawable(Utils.getDrawableFromAssets(context, mDataset.get(position).image));
 
+            if (mDataset.get(position).favorite == 1) {
+                ((ViewHolder) holder).favoriteImageView.setImageResource(R.drawable.icon_favorite_active);
+            } else {
+                ((ViewHolder) holder).favoriteImageView.setImageResource(R.drawable.icon_favorite_inactive);
+            }
+
+            ((ViewHolder) holder).favoriteImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mDataset.get(position).favorite == 0) {
+                        mDataset.get(position).favorite = 1;
+                        ((ViewHolder) holder).favoriteImageView.setImageResource(R.drawable.icon_favorite_active);
+                    } else {
+                        mDataset.get(position).favorite = 0;
+                        ((ViewHolder) holder).favoriteImageView.setImageResource(R.drawable.icon_favorite_inactive);
+                    }
+                    KanjiProvider.updateFavorite(context, mDataset.get(position));
+                }
+            });
 
             ((ViewHolder) holder).view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -173,8 +195,11 @@ public class ReviewListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView kanjiTextView;
+        public TextView kunyomiTextView;
+        public TextView onyomiTextView;
         public TextView nameTextView;
         public TextView rememberTextView;
+        public ImageView favoriteImageView;
         public ImageView pictureImageView;
 
 
@@ -188,8 +213,10 @@ public class ReviewListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             kanjiTextView = (TextView) v.findViewById(R.id.kanjiTextView);
             nameTextView = (TextView) v.findViewById(R.id.nameTextView);
             rememberTextView = (TextView) v.findViewById(R.id.rememberTextView);
+            kunyomiTextView = (TextView) v.findViewById(R.id.kunyomiTextView);
+            onyomiTextView = (TextView) v.findViewById(R.id.onyomiTextView);
             pictureImageView = (ImageView) v.findViewById(R.id.pictureImageView);
-
+            favoriteImageView = (ImageView) v.findViewById(R.id.favoriteImageView);
         }
 
 

@@ -1,9 +1,11 @@
 <resources>
-    <string name="app_name">KanjiLookAndLearn</string>
+    <string name="app_name">Kanji Remember</string>
     <string name="closeDrawer">Navigation View</string>
     <string name="openDrawer">Navigation View Closed</string>
-    <string name="top_menu">Top</string>
+    <string name="top_menu">All</string>
     <string name="favorite_menu">Favorite</string>
-    <string name="action_settings">Setting</string>
+    <string name="action_show_favorite">Favorite</string>
     <string name="search">Search</string>
+    <string name="kunyomi">訓：</string>
+    <string name="onyomi">音：</string>
 </resources>

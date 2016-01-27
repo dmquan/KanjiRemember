@@ -9,12 +9,12 @@
     <!-- A CardView that contains a TextView -->
     <android.support.v7.widget.CardView
         android:id="@+id/card_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
         app:cardCornerRadius="4dp"
         app:cardPreventCornerOverlap="false"
-        app:cardUseCompatPadding="true">
+        app:cardUseCompatPadding="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -23,65 +23,123 @@
             android:padding="10dp">
 
             <LinearLayout
-                android:id="@+id/image_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:weightSum="4">
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/kanjiTextView"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:id="@+id/image_layout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:gravity="center"
-                    android:text="歳"
-                    android:textColor="@color/text_color"
-                    android:textSize="36dp" />
+                    android:weightSum="4">
 
-                <ImageView
-                    android:id="@+id/pictureImageView"
-                    android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:layout_weight="3"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/age" />
+                    <TextView
+                        android:id="@+id/kanjiTextView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="歳"
+                        android:textColor="@color/text_color"
+                        android:textSize="36dp" />
+
+                    <ImageView
+                        android:id="@+id/pictureImageView"
+                        android:layout_width="0dp"
+                        android:layout_height="60dp"
+                        android:layout_weight="3"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/age" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/image_layout"
+                    android:gravity="center"
+                    android:weightSum="4">
+
+                    <TextView
+                        android:id="@+id/nameTextView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="Nhất"
+                        android:textColor="@color/text_color"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:id="@+id/rememberTextView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:gravity="center"
+                        android:text="Một ngón tay"
+                        android:textColor="@color/text_color"
+                        android:textSize="16dp" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="10dp"
+
+                    android:background="#000" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/kunyomi"
+                        android:textColor="@color/text_color"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/kunyomiTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_color"
+                        android:textSize="14dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/onyomi"
+                        android:textColor="@color/text_color"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/onyomiTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_color"
+                        android:textSize="14dp" />
+                </LinearLayout>
+
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <ImageView
+                android:id="@+id/favoriteImageView"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/image_layout"
-                android:gravity="center"
-                android:weightSum="4">
-
-                <TextView
-                    android:id="@+id/nameTextView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Nhất"
-                    android:textColor="@color/text_color"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/rememberTextView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:gravity="center"
-                    android:text="Một ngón tay"
-                    android:textColor="@color/text_color"
-                    android:textSize="18dp" />
-
-            </LinearLayout>
-            <ImageView android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/icon_favorite_inactive"
                 android:layout_alignParentRight="true"
-                />
+                android:src="@drawable/icon_favorite_inactive" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 

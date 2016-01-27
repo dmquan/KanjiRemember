@@ -17,7 +17,7 @@ public class KanjiProvider {
     public final static String DEFAULT_SORT_ORDER = Columns.ID;
 
     public final class Columns implements BaseColumns {
-        public final static String ID = "rowid";
+        public final static String ID = "id";
         public final static String KANJI = "kanji";
         public final static String NAME = "name";
         public final static String ONYOMI = "onyomi";
@@ -28,6 +28,7 @@ public class KanjiProvider {
         public final static String IMAGE = "image";
         public final static String IMAGE_WRITE = "image_write";
         public final static String REMEMBER = "remember";
+        public final static String FAVORITE = "favorite";
     }
 
 
@@ -59,6 +60,45 @@ public class KanjiProvider {
             b.image = Utils.getCursorString(c, Columns.IMAGE);
             b.imageWrite = Utils.getCursorString(c, Columns.IMAGE_WRITE);
             b.remember = Utils.getCursorString(c,Columns.REMEMBER);
+            b.favorite = Utils.getCursorInt(c, Columns.FAVORITE);
+            array.add(b);
+            c.moveToNext();
+        }
+        c.close();
+
+        return array;
+    }
+
+
+    public static ArrayList<Kanji> getAllFavorite(Context context) {
+        DatabaseHandler db = DatabaseHandler.getDatabase(context);
+        String strFilter = Columns.FAVORITE+ "=1";
+        Cursor c = db.query(TABLE_NAME, null, strFilter, null, DEFAULT_SORT_ORDER);
+        if (c == null) {
+            return null;
+        }
+        if (c.getCount() == 0) {
+            c.close();
+            return null;
+        }
+        c.moveToFirst();
+
+        ArrayList<Kanji> array = new ArrayList<Kanji>();
+        Kanji b = null;
+        while (!c.isAfterLast()) {
+            b = new Kanji();
+            b.id = Utils.getCursorInt(c, Columns.ID);
+            b.name = Utils.getCursorString(c, Columns.NAME);
+            b.kanji = Utils.getCursorString(c, Columns.KANJI);
+            b.onyomi = Utils.getCursorString(c, Columns.ONYOMI);
+            b.kunyomi = Utils.getCursorString(c, Columns.KUNYOMI);
+            b.meanVietnamese = Utils.getCursorString(c, Columns.MEAN_VIETNAMESE);
+            b.meanEnglish = Utils.getCursorString(c, Columns.MEAN_ENGLISH);
+            b.example = Utils.getCursorString(c, Columns.EXAMPLE);
+            b.image = Utils.getCursorString(c, Columns.IMAGE);
+            b.imageWrite = Utils.getCursorString(c, Columns.IMAGE_WRITE);
+            b.remember = Utils.getCursorString(c,Columns.REMEMBER);
+            b.favorite = Utils.getCursorInt(c, Columns.FAVORITE);
             array.add(b);
             c.moveToNext();
         }
@@ -112,12 +152,23 @@ public class KanjiProvider {
             b.image = Utils.getCursorString(c, Columns.IMAGE);
             b.imageWrite = Utils.getCursorString(c, Columns.IMAGE_WRITE);
             b.remember = Utils.getCursorString(c,Columns.REMEMBER);
+            b.favorite = Utils.getCursorInt(c, Columns.FAVORITE);
             areaArray.add(b);
             c.moveToNext();
         }
         c.close();
 
         return areaArray;
+    }
+
+    public static boolean updateFavorite(Context context,
+                                         Kanji kanji) {
+        DatabaseHandler db = DatabaseHandler.getDatabase(context);
+        String strFilter = Columns.ID+ "=" + kanji.id;
+        ContentValues cv = new ContentValues();
+        cv.put(Columns.FAVORITE, kanji.favorite);
+        db.update(TABLE_NAME, cv, strFilter, null);
+        return true;
     }
 
 

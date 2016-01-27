@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -114,13 +115,17 @@ public class DatabaseHandler {
 
             InputStream ip = context.getAssets().open(DATABASE_NAME + ".db");
             Log.i("Input Stream....", ip + "");
+            File dir = new File(DATABASE_PATH);
+            if(!dir.exists()){
+                dir.mkdirs(); //added
+            }
+
             String op = DATABASE_PATH + DATABASE_NAME;
             OutputStream output = new FileOutputStream(op);
             byte[] buffer = new byte[1024];
             int length;
             while ((length = ip.read(buffer)) > 0) {
                 output.write(buffer, 0, length);
-                Log.i("Content.... ", length + "");
             }
             output.flush();
             output.close();
@@ -132,5 +137,13 @@ public class DatabaseHandler {
 
     }
 
+    public static boolean isHavingDatabase(){
+        String op = DATABASE_PATH + DATABASE_NAME;
+        File file = new File(op);
+        if(file.exists()) {
+            return true;
+        }
+        return false;
+    }
 
 }

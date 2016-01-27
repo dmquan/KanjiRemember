@@ -90,6 +90,14 @@ public class Utils {
         return -1;
     }
 
+    public static int getCursorBoolean(Cursor c, String name) {
+        int index = c.getColumnIndex(name);
+        if (index >= 0) {
+            return c.getInt(index);
+        }
+        return -1;
+    }
+
     public static long getCursorLong(Cursor c, String name) {
         int index = c.getColumnIndex(name);
         if (index >= 0) {
