@@ -3,4 +3,5 @@
     <color name="PrimaryColor">#2196F3</color>
     <color name="PrimaryDarkColor">#1976D2</color>
     <color name="text_color">#000</color>
+    <color name="app_bg">#122196f3</color>
 </resources>

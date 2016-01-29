@@ -1,7 +1,9 @@
 package com.supermario.kanjilookandlearn.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.supermario.kanjilookandlearn.R;
+import com.supermario.kanjilookandlearn.activity.FlashCardActivity;
 import com.supermario.kanjilookandlearn.activity.MainActivity;
 import com.supermario.kanjilookandlearn.adapter.ReviewListAdapter;
 import com.supermario.kanjilookandlearn.data.Kanji;
@@ -26,6 +29,7 @@ public class ContentFragment extends Fragment {
     public RecyclerView mRecyclerView;
     public ArrayList<Kanji> list = new ArrayList<Kanji>();
     private ReviewListAdapter mAdapter;
+    private FloatingActionButton floatButton;
 
     @Nullable
     @Override
@@ -37,6 +41,13 @@ public class ContentFragment extends Fragment {
 
     private void initView() {
         initId();
+        floatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), FlashCardActivity.class);
+                startActivity(intent);
+            }
+        });
         list = KanjiProvider.getAll(getActivity());
 
         mRecyclerView.setHasFixedSize(true);
@@ -47,7 +58,7 @@ public class ContentFragment extends Fragment {
 
     private void initId() {
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview);
-
+        floatButton = (FloatingActionButton) rootView.findViewById(R.id.floatButton);
     }
 
     public void updateKanjiList(ArrayList<Kanji> list){
