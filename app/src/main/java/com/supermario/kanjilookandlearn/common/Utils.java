@@ -141,10 +141,26 @@ public class Utils {
     public static InputStream getInputStreamFromAssets(Context context, String name) {
 
         Resources res = context.getResources();
+        
+        int rid = res
+                .getIdentifier(name, "assets", context.getPackageName());
+        if (rid <= 0) {
+            return null;
+        }
+        InputStream in = res.openRawResource(rid);
+        if (in == null) {
+            return null;
+        }
+        return in;
+    }
+
+    public static InputStream getInputStreamFromRaw(Context context, String name) {
+
+        Resources res = context.getResources();
 
         //add "_" file userName for fix resource userName  error.
         int rid = res
-                .getIdentifier(name, "assets", context.getPackageName());
+                .getIdentifier(name, "raw", context.getPackageName());
         if (rid <= 0) {
             return null;
         }
@@ -221,5 +237,15 @@ public class Utils {
         }
 
         return true;
+    }
+
+    public static String stringToHex(String string) {
+        StringBuilder buf = new StringBuilder(200);
+        for (char ch: string.toCharArray()) {
+            if (buf.length() > 0)
+                buf.append(' ');
+            buf.append(String.format("%05x", (int) ch));
+        }
+        return buf.toString();
     }
 }
